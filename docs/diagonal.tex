@@ -1,0 +1,107 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\begin{document}
+Consider an array where the elements are with incremental natural numbers starting with 1 at the top right corner and following a diagonal pattern:
+
+\begin{equation}
+    a = 
+\begin{bmatrix}
+    1 & 2 & 4 & 7 & 11 & 16 & 22 & 29 \\
+    3 & 5 & 8 & 12 & 17 & 23 & 30 & 38\\
+    6 & 9 & 13 & 18 & 24 & 31 & 39 & 48\\
+    10 & 14 & 19 & 25 & 32 & 40 & 49 & 59\\
+    15 & 20 & 26 & 33 & 41 & 50 & 60 & 71\\
+    21 & 27 & 34 & 42 & 51 & 61 & 72 & 84\\
+    28 & 35 & 43 & 52 & 62 & 73 & 85 & 98
+\end{bmatrix}\nonumber
+\end{equation}
+
+What follows is the procedure to obtain a formula that gives the value for $a_(ij)$ without having to find it iteratively.
+
+Let $b$ be the first row of $a$:
+\begin{equation}
+    b =
+\begin{bmatrix}
+    1 & 2 & 4 & 7 & 11 & 16 &\cdots\nonumber\\
+\end{bmatrix}
+\end{equation}
+
+Each number has a relationship with the previous one
+
+\begin{eqnarray*}
+b[0] &=& 1 + 0 = 1\\
+b[1] &=& 1 + 1 = 2\\
+b[2] &=& 2 + 2 = 4\\
+b[3] &=& 4 + 3 = 7\\
+b[4] &=& 7 + 4 = 11\\
+b[5] &=& 11 + 5 = 16\\
+\cdots&\\
+b[n] &=& b[n-1] + n\\
+\end{eqnarray*}
+
+Extending $b[n-1]$ on each line shows a pattern:
+
+\begin{eqnarray}
+b[0] &=& 1\nonumber\\
+b[1] &=& b[0] + 1 = 0(n-1) + 1 + n = 1n + 1\nonumber\\
+b[2] &=& b[1] + 2 = 1(n-1) + 1 + n = 2n + 0\nonumber\\
+b[3] &=& b[2] + 3 = 2(n-1) + 0 + n = 3n - 2\nonumber\\
+b[4] &=& b[3] + 4 = 3(n-1) - 2 + n = 4n - 5\nonumber\\
+b[5] &=& b[4] + 5 = 4(n-1) - 5 + n = 5n - 9\nonumber\\
+b[6] &=& b[5] + 6 = 5(n-1) - 9 + n = 6n - 14\nonumber\\
+\cdots&\nonumber\\
+b[n] &=& n^2 - c[n] \label{eq:b}
+\end{eqnarray}
+
+where
+
+\begin{equation}
+c = \begin{bmatrix}-1 & -1 & 0 & 2 & 5 & 9 & 14 & \cdots\end{bmatrix}\nonumber
+\end{equation}    
+\begin{eqnarray*}
+c[0] &=& -1\\
+c[1] &=& -1 = 0 - 1\\
+c[2] &=&  0 = 1 - 1\\
+c[3] &=&  2 = 2 + 0\\
+c[4] &=&  5 = 3 + 2\\
+c[5] &=&  9 = 4 + 5\\
+c[6] &=& 14 = 5 + 9\\
+\cdots&\\
+c[n] &=& (n-1) + c[n-1]\\
+\end{eqnarray*}
+
+Let's develop one, say $c[6]$, to unveil the pattern:
+
+\begin{eqnarray*}
+c[6] &=& (6-1) + c[5]\\
+     &=& (6-1) + (5-1) + c[4]\\
+     &=& (6-1) + (5-1) + (4-1) + c[3]\\
+     &=& (6-1) + (5-1) + (4-1) + (3-1) + c[2]\\
+     &=& (6-1) + (5-1) + (4-1) + (3-1) + (2-1) + c[1]\\
+     &=& (6-1) + (5-1) + (4-1) + (3-1) + (2-1) + (1-1) + c[0]\\
+\end{eqnarray*}
+that looks like:
+
+\begin{eqnarray} 
+c[n] &=& \sum_{i=1}^{n} (i-1) + c[0]\nonumber
+= \sum_{i=1}^{n}i - \sum_{i=1}^{n} 1 + c[0]\nonumber\\
+     &=& \frac{n(n+1)}{2} - n -1\nonumber
+     = \frac{n^2 + n - 2n - 2}{2}\nonumber\\
+     &=& \frac{n^2 - n - 2}{2}\label{eq:c}\nonumber\\
+\end{eqnarray}
+
+And from (\ref{eq:b}) and (\ref{eq:c}) we have:
+
+\begin{eqnarray}
+b[n] &=& n^2 - \frac{n^2 - n - 2}{2}\nonumber
+     = \frac{2n^2 - n^2 + n + 2}{2}\nonumber\\
+     &=& \frac{n^2 +n +2 }{2}\label{eq:row}\nonumber\\
+\end{eqnarray}
+
+That gives us the formula to find out the elements of the first row.
+To apply it to the rest of the rows, in (\ref{eq:row}) $n = i j$ and we offset the elements with the row $i$:
+
+\begin{equation}
+    a_{ij} =  i + \frac{(ij)^2+(ij)+2}{2}\label{eq:row1}\nonumber\\
+\end{equation}
+\end{document}
