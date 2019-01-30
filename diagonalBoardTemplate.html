@@ -1,0 +1,32 @@
+{{$board := .}}
+<html>
+
+<head>
+    <title>Diagonal Board</title>
+    <style>
+    td {
+        border: 1px solid black; 
+        text-align:center; 
+        width: 50px; 
+        height: 50px;
+    }
+    </style>
+</head>
+
+<body>
+<table cellpadding="0" cellspacing="0">
+    <tbody>
+        {{$black := true}}
+        {{ range $i := N 0 9}}
+        {{$black = not $black}}
+        <tr>
+            {{ range $j := N 0 9}}
+            {{$black = not $black}}
+                <td {{if $black }} style="background-color: #000000; color: #FFFFFF" {{else}} style="background-color: #FFFFFF; color: #000000" {{end}}>{{$board.GetNumber $i $j}}</td>
+            {{ end }}
+        </tr>
+        {{ end }}
+    </tbody>
+</table>
+</body>
+</html>

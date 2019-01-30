@@ -55,7 +55,7 @@ func Test_diagonalBoard_getKnightMovesFromPosition(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			b := &diagonalBoard{
-				boardSize: tt.fields.boardSize,
+				BoardSize: tt.fields.boardSize,
 				numbers:   tt.fields.numbers,
 				visited:   tt.fields.visited,
 			}
