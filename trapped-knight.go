@@ -113,6 +113,7 @@ func (b *diagonalBoard) drawBoard() {
 	}
 }
 
+//N allows integer ennumeration from templates
 func N(start, end int) (stream chan int) {
 	stream = make(chan int)
 	go func() {
