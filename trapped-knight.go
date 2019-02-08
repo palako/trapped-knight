@@ -15,22 +15,38 @@ type square struct {
 	value int
 }
 
-type diagonalBoard struct {
-	BoardSize int
-	numbers   [][]int // diagonalBoard doesn't need to hold the numbers in an array because of the formula in getValue
-	visited   [][]bool
+//IBoard TODO DOC
+type IBoard interface {
+	GetNumber(int, int) int
 }
 
-func (b *diagonalBoard) visit(row int, col int) {
+//Board TODO DOC
+type Board struct {
+	concreteBoard IBoard
+	BoardSize     int
+	numbers       [][]int // diagonalBoard doesn't need to hold the numbers in an array because of the formula in getValue
+	visited       [][]bool
+}
+
+type diagonalBoard struct {
+	b Board
+}
+
+func (b *Board) visit(row int, col int) {
 	b.visited[row][col] = true
 }
 
-func (b *diagonalBoard) GetNumber(row int, column int) int {
+//GetNumber TODO DOC
+func (b Board) GetNumber(row int, column int) int {
+	return b.concreteBoard.GetNumber(row, column)
+}
+
+func (b diagonalBoard) GetNumber(row int, column int) int {
 	n := row + column
 	return row + ((n*n + n + 2) / 2)
 }
 
-func (b *diagonalBoard) getKnightMovesFromPosition(row int, col int) []square {
+func (b *Board) getKnightMovesFromPosition(row int, col int) []square {
 	moves := make([]square, 0, 8) //empty slice to hold up to 8 moves
 	if row > 1 {
 		if col > 0 {
@@ -87,7 +103,7 @@ func lowestValue(moves []square) (square, error) {
 	return *new(square), errors.New("lowestValue: empty list of moves")
 }
 
-func (b *diagonalBoard) findLowestNonVisitedFromSortedList(moves []square) (square, error) {
+func (b *Board) findLowestNonVisitedFromSortedList(moves []square) (square, error) {
 	if len(moves) == 0 {
 		return *new(square), errors.New("findLowestNonVisistedFromSortedList: empty list of moves")
 	}
@@ -99,12 +115,12 @@ func (b *diagonalBoard) findLowestNonVisitedFromSortedList(moves []square) (squa
 	return *new(square), errors.New("findLowestNonVisistedFromSortedList: All available squares already visisted")
 }
 
-func (b *diagonalBoard) findLowestNonVisited(moves []square) (square, error) {
+func (b *Board) findLowestNonVisited(moves []square) (square, error) {
 	sortMovesByValue(moves)
 	return b.findLowestNonVisitedFromSortedList(moves)
 }
 
-func (b *diagonalBoard) drawBoard() {
+func (b *Board) drawBoard() {
 	for i := int(0); i < b.BoardSize; i++ {
 		for j := int(0); j < b.BoardSize; j++ {
 			fmt.Printf("%v ", b.GetNumber(i, j))
@@ -125,7 +141,7 @@ func N(start, end int) (stream chan int) {
 	return stream
 }
 
-func (b *diagonalBoard) htmlBoardToFile() {
+func (b *Board) htmlBoardToFile() {
 	t, _ := template.New("diagonalBoardTemplate.html").Funcs(template.FuncMap{"N": N}).ParseFiles("palako/trapped-knight/diagonalBoardTemplate.html")
 	file, _ := os.Create("palako/trapped-knight/diagonalBoard.html")
 	defer file.Close()
@@ -134,16 +150,20 @@ func (b *diagonalBoard) htmlBoardToFile() {
 	bufferedWriter.Flush()
 }
 
-func createBoard(size int) diagonalBoard {
+func createBoard(boardType string, size int) Board {
 	v := make([][]bool, size)
 	for i := range v {
 		v[i] = make([]bool, size)
 	}
-	return diagonalBoard{BoardSize: size, visited: v}
+	switch boardType {
+	case "diagonal":
+		return Board{concreteBoard: diagonalBoard{}, BoardSize: size, visited: v}
+	}
+	panic("Unknown board type")
 }
 
 func main() {
-	b := createBoard(100)
+	b := createBoard("diagonal", 100)
 	//b.drawBoard()
 	b.htmlBoardToFile()
 	x, y := int(0), int(0)

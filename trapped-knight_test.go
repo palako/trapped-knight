@@ -54,11 +54,12 @@ func Test_diagonalBoard_getKnightMovesFromPosition(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			b := &diagonalBoard{
-				BoardSize: tt.fields.boardSize,
-				numbers:   tt.fields.numbers,
-				visited:   tt.fields.visited,
-			}
+			b := createBoard("diagonal", tt.fields.boardSize)
+			//b := &diagonalBoard{
+			//	BoardSize: tt.fields.boardSize,
+			//	numbers:   tt.fields.numbers,
+			//	visited:   tt.fields.visited,
+			//}
 			if got := b.getKnightMovesFromPosition(tt.args.row, tt.args.col); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("diagonalBoard.getKnightMovesFromPosition() = %v, want %v", got, tt.want)
 			}
