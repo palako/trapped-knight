@@ -60,7 +60,7 @@ func Test_diagonalBoard_getKnightMovesFromPosition(t *testing.T) {
 			//	numbers:   tt.fields.numbers,
 			//	visited:   tt.fields.visited,
 			//}
-			if got := b.getKnightMovesFromPosition(tt.args.row, tt.args.col); !reflect.DeepEqual(got, tt.want) {
+			if got := getKnightMovesFromPosition(b, tt.args.row, tt.args.col); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("diagonalBoard.getKnightMovesFromPosition() = %v, want %v", got, tt.want)
 			}
 		})

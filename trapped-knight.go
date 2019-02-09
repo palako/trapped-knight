@@ -26,43 +26,30 @@ func lowestValue(moves []square) (square, error) {
 	return *new(square), errors.New("lowestValue: empty list of moves")
 }
 
-//N allows integer ennumeration from templates
-func N(start, end int) (stream chan int) {
-	stream = make(chan int)
-	go func() {
-		for i := start; i <= end; i++ {
-			stream <- i
-		}
-		defer close(stream)
-	}()
-	return stream
-}
-
-func createBoard(boardType string, size int) Board {
-	v := make([][]bool, size)
-	for i := range v {
-		v[i] = make([]bool, size)
-	}
+func createBoard(boardType string, size int) IBoard {
+	v := make(map[string]bool)
 	switch boardType {
+	case "spiral":
+		return &spiralBoard{Board{BoardSize: size, visited: v}}
 	case "diagonal":
-		return Board{concreteBoard: diagonalBoard{}, BoardSize: size, visited: v}
+		return &diagonalBoard{Board{BoardSize: size, visited: v}}
 	}
 	panic("Unknown board type")
 }
 
 func main() {
-	b := createBoard("diagonal", 100)
-	//b.drawBoard()
-	b.htmlBoardToFile()
+	b := createBoard("spiral", 3000)
+	//b.PrintBoard()
+	//b.HTMLBoardToFile(b)
 	x, y := int(0), int(0)
-	for {
+	for i := 0; ; i++ {
 		b.visit(x, y)
-		moves := (b.getKnightMovesFromPosition(x, y))
-		lowest, err := b.findLowestNonVisited(moves)
+		moves := (getKnightMovesFromPosition(b, x, y))
+		lowest, err := findLowestNonVisited(b, moves)
 		if err != nil {
 			return
 		}
-		fmt.Println(lowest)
+		fmt.Printf("%d: %v\n", i, lowest)
 		x = lowest.row
 		y = lowest.col
 	}
