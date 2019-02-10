@@ -22,6 +22,8 @@ func (b spiralBoard) BottomEdge() int {
 	return (b.GetBoardSize() / 2) - 1
 }
 
+// getNumber Check docs/spiral.xlsx for an explanation on the following procedure to calculate
+// the value of the corresponding square in the spiral in O(1)
 func (b spiralBoard) getNumber(row float64, column float64) float64 {
 	absRow := math.Abs(row)
 	absColumn := math.Abs(column)
