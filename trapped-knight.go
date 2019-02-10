@@ -42,11 +42,12 @@ func main() {
 	//b.PrintBoard()
 	//b.HTMLBoardToFile(b)
 	x, y := int(0), int(0)
-	for i := 0; ; i++ {
+	for i := 1; ; i++ {
 		b.visit(x, y)
 		moves := (getKnightMovesFromPosition(b, x, y))
 		lowest, err := findLowestNonVisited(b, moves)
 		if err != nil {
+			fmt.Printf("%d: {x:%v y:%v v:%v}\n", i, x, y, b.GetNumber(x, y))
 			return
 		}
 		fmt.Printf("%d: %v\n", i, lowest)

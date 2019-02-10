@@ -9,22 +9,22 @@ type spiralBoard struct {
 	Board
 }
 
-func (b spiralBoard) LeftEdge() int {
+func (b *spiralBoard) LeftEdge() int {
 	return -b.GetBoardSize() / 2
 }
-func (b spiralBoard) RightEdge() int {
+func (b *spiralBoard) RightEdge() int {
 	return (b.GetBoardSize() / 2) - 1
 }
-func (b spiralBoard) TopEdge() int {
+func (b *spiralBoard) TopEdge() int {
 	return -b.GetBoardSize() / 2
 }
-func (b spiralBoard) BottomEdge() int {
+func (b *spiralBoard) BottomEdge() int {
 	return (b.GetBoardSize() / 2) - 1
 }
 
 // getNumber Check docs/spiral.xlsx for an explanation on the following procedure to calculate
 // the value of the corresponding square in the spiral in O(1)
-func (b spiralBoard) getNumber(row float64, column float64) float64 {
+func (b *spiralBoard) getNumber(row float64, column float64) float64 {
 	absRow := math.Abs(row)
 	absColumn := math.Abs(column)
 
@@ -66,7 +66,7 @@ func (b spiralBoard) getNumber(row float64, column float64) float64 {
 }
 
 //GetNumber in spiralBoard acts as a wrapper to work with integers and flips the sign of the rows
-func (b spiralBoard) GetNumber(row int, column int) int {
+func (b *spiralBoard) GetNumber(row int, column int) int {
 	return int(b.getNumber(-float64(row), float64(column)))
 }
 

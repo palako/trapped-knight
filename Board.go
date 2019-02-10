@@ -61,7 +61,7 @@ func getKnightMovesFromPosition(b IBoard, row int, col int) []square {
 		}
 	}
 	if row > b.TopEdge() {
-		if col > b.LeftEdge() {
+		if col > b.LeftEdge()+1 {
 			moves = append(moves, square{row - 1, col - 2, b.GetNumber(row-1, col-2)})
 		}
 		if col < b.RightEdge()-1 {
@@ -69,7 +69,7 @@ func getKnightMovesFromPosition(b IBoard, row int, col int) []square {
 		}
 	}
 	if row < b.BottomEdge() {
-		if col > b.LeftEdge() {
+		if col > b.LeftEdge()+1 {
 			moves = append(moves, square{row + 1, col - 2, b.GetNumber(row+1, col-2)})
 		}
 		if col < b.RightEdge()-1 {
@@ -117,7 +117,7 @@ func N(b IBoard) (stream chan int) {
 }
 
 //HTMLBoardToFile TODO DOC
-func (Board) HTMLBoardToFile(b IBoard) {
+func (*Board) HTMLBoardToFile(b IBoard) {
 	t, _ := template.New("boardTemplate.html").Funcs(template.FuncMap{"N": N}).ParseFiles("palako/trapped-knight/boardTemplate.html")
 	file, _ := os.Create("palako/trapped-knight/board.html")
 	defer file.Close()

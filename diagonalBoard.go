@@ -6,20 +6,20 @@ type diagonalBoard struct {
 	Board
 }
 
-func (b diagonalBoard) LeftEdge() int {
+func (b *diagonalBoard) LeftEdge() int {
 	return 0
 }
-func (b diagonalBoard) RightEdge() int {
+func (b *diagonalBoard) RightEdge() int {
 	return b.GetBoardSize() - 1
 }
-func (b diagonalBoard) TopEdge() int {
+func (b *diagonalBoard) TopEdge() int {
 	return 0
 }
-func (b diagonalBoard) BottomEdge() int {
+func (b *diagonalBoard) BottomEdge() int {
 	return b.GetBoardSize() - 1
 }
 
-func (b diagonalBoard) GetNumber(row int, column int) int {
+func (b *diagonalBoard) GetNumber(row int, column int) int {
 	n := row + column
 	return row + ((n*n + n + 2) / 2)
 }
