@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 )
 
 type spiralBoard struct {
@@ -24,23 +23,25 @@ func (b *spiralBoard) BottomEdge() int {
 
 // getNumber Check docs/spiral.xlsx for an explanation on the following procedure to calculate
 // the value of the corresponding square in the spiral in O(1)
-func (b *spiralBoard) getNumber(row float64, column float64) float64 {
-	absRow := math.Abs(row)
-	absColumn := math.Abs(column)
+func (b *spiralBoard) GetNumber(row int, column int) int {
+
+	//flip the y axes. (0,0) will be in the middle of the board, with positive numbers going up
+	row = -row
 
 	// r is the outer ring of the spiral
-	r := math.Max(absRow, absColumn)
+	r := max(abs(row), abs(column))
+
 	//accumInnerRings is the count of elements from all of the inner spirals
 	accumInnerRings := (4 * r * r) - (4 * r) + 1
 
 	totalOuterRing := 8 * r
 	edgeSide := totalOuterRing / 4
 	//bring (0,0) to the bottom right of the outer ring
-	shiftColumn := math.Abs(column - (edgeSide / 2))
+	shiftColumn := abs(column - (edgeSide / 2))
 	shiftRow := row + (edgeSide / 2)
 
-	var previousEdges float64
-	var edge float64
+	var previousEdges int
+	var edge int
 	switch {
 	case column == r && row != -r:
 		//right edge of the outer spiral, except for the bottom-right corner
@@ -63,11 +64,6 @@ func (b *spiralBoard) getNumber(row float64, column float64) float64 {
 		edge = previousEdges + (edgeSide - shiftColumn)
 	}
 	return accumInnerRings + edge
-}
-
-//GetNumber in spiralBoard acts as a wrapper to work with integers and flips the sign of the rows
-func (b *spiralBoard) GetNumber(row int, column int) int {
-	return int(b.getNumber(-float64(row), float64(column)))
 }
 
 func (b *spiralBoard) PrintBoard() {
