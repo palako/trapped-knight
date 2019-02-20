@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"os"
 	"sort"
 )
 
@@ -26,19 +27,19 @@ func lowestValue(moves []square) (square, error) {
 	return *new(square), errors.New("lowestValue: empty list of moves")
 }
 
-func createBoard(boardType string, size int) IBoard {
-	v := make(map[string]bool)
-	switch boardType {
-	case "spiral":
-		return &spiralBoard{Board{BoardSize: size, visited: v}}
-	case "diagonal":
-		return &diagonalBoard{Board{BoardSize: size, visited: v}}
-	}
-	panic("Unknown board type")
-}
-
 func main() {
-	b := createBoard("spiral", 3000)
+	//supported types are "spiral" and "diagonal"
+	boardType := "spiral"
+	if len(os.Args) > 1 {
+		switch os.Args[1] {
+		case "diagonal", "spiral":
+			boardType = os.Args[1]
+		default:
+			fmt.Println("ERROR: Unsupported board type. Supported types are \"spiral\" and \"diagonal\"")
+			return
+		}
+	}
+	b := createBoard(boardType, 3000)
 	//b.PrintBoard()
 	//b.HTMLBoardToFile(b)
 	x, y := int(0), int(0)

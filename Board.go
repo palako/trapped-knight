@@ -34,6 +34,17 @@ type Board struct {
 	visited   map[string]bool
 }
 
+func createBoard(boardType string, size int) IBoard {
+	v := make(map[string]bool)
+	switch boardType {
+	case "spiral":
+		return &spiralBoard{Board{BoardSize: size, visited: v}}
+	case "diagonal":
+		return &diagonalBoard{Board{BoardSize: size, visited: v}}
+	}
+	panic("Unknown board type")
+}
+
 func (b *Board) visit(row int, col int) {
 	key := fmt.Sprintf("%d,%d", row, col)
 	b.visited[key] = true
