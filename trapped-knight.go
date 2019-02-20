@@ -2,8 +2,8 @@ package main
 
 import (
 	"errors"
+	"flag"
 	"fmt"
-	"os"
 	"sort"
 )
 
@@ -28,20 +28,26 @@ func lowestValue(moves []square) (square, error) {
 }
 
 func main() {
-	//supported types are "spiral" and "diagonal"
-	boardType := "spiral"
-	if len(os.Args) > 1 {
-		switch os.Args[1] {
-		case "diagonal", "spiral":
-			boardType = os.Args[1]
-		default:
-			fmt.Println("ERROR: Unsupported board type. Supported types are \"spiral\" and \"diagonal\"")
-			return
-		}
+
+	boardType := flag.String("type", "spiral", "Supported types are diagonal and spiral")
+	boardSize := flag.Int("size", 3000, "Size of one side of the board, creates a board of size x size squares")
+	printFlag := flag.String("print", "", "Supported values are console and html")
+
+	flag.Parse()
+
+	if *boardType != "spiral" && *boardType != "diagonal" {
+		fmt.Println("ERROR: Unsupported board type. Supported types are \"spiral\" and \"diagonal\"")
+		return
 	}
-	b := createBoard(boardType, 3000)
-	//b.PrintBoard()
-	//b.HTMLBoardToFile(b)
+
+	b := createBoard(*boardType, *boardSize)
+	switch *printFlag {
+	case "console":
+		b.PrintBoard()
+	case "html":
+		b.HTMLBoardToFile(b)
+	}
+
 	x, y := int(0), int(0)
 	for i := 1; ; i++ {
 		b.visit(x, y)
